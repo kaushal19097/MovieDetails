@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter with Closures</title>
+    <style>
+        body{
+            text-align: center;
+        }
+        #counter{
+            font-size: 2em;
+            margin: 20px;
+        }
+        button{
+            font-size: 1em;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Counter</h1>
+    <div id="counter">0</div>
+    <button id="increment">Increment</button>
+    <button id="decrement">Decrement</button>
+
+    <script>
+        function createCounter(initialValue){
+            let count=initialValue;
+            
+            function increment(){
+                count++;
+                updateUI();
+            }
+            
+            function decrement(){
+                count--;
+                updateUI();
+            }
+            
+            function getValue(){
+                return count;
+            }
+            
+            return{ increment, decrement, getValue };
+        }
+
+        const counter=createCounter(0);
+        const counterElement=document.getElementById("counter");
+        const incrementButton=document.getElementById("increment");
+        const decrementButton=document.getElementById("decrement");
+
+        function updateUI(){
+            counterElement.textContent=counter.getValue();
+        }
+
+        incrementButton.addEventListener("click", counter.increment);
+        decrementButton.addEventListener("click", counter.decrement);
+    </script>
+</body>
+</html>

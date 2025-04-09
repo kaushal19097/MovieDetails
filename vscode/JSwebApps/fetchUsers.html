@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Users</title>
+    <style>
+        table{
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td{
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th{
+            background-color: lightgray;
+        }
+        .error{
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>User List</h2>
+    <div id="error" class="error"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+    </table>
+
+    <script>
+        async function fetchUsers(){
+            try{
+                let response=await fetch("https://masaiassignment-17a4f-default-rtdb.firebaseio.com/users.json");
+                if (!response.ok){
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                let data=await response.json();
+                
+                let tableBody=document.getElementById("userTable");
+                tableBody.innerHTML="";
+                
+                if (!data){
+                    document.getElementById("error").innerText="No users found.";
+                    return;
+                }
+                console.log(typeof(data));
+                console.log(data);
+
+                Object.values(data).forEach(user =>{
+                    let row=`<tr>
+                        <td>${user.name || "N/A"}</td>
+                        <td>${user.email || "N/A"}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error){
+                document.getElementById("error").innerText="Failed to fetch users. " + error.message;
+            }
+        }
+
+        fetchUsers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Product Search</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-bar{
+            margin-bottom: 20px;
+        }
+        .product{
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .product img{
+            max-width: 100px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Search and Filter</h1>
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Search products by title...">
+        <select id="category">
+            <option value="">All Categories</option>
+        </select>
+        <select id="sort">
+            <option value="">Sort by Price</option>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
+        </select>
+        <p>Showing <span id="product-count">0</span> products</p>
+    </div>
+    <div id="product-list"></div>
+
+    <script>
+        let productList=document.getElementById('product-list');
+        let searchInput=document.getElementById('search');
+        let categoryDropdown=document.getElementById('category');
+        let sortDropdown=document.getElementById('sort');
+        let productCount=document.getElementById('product-count');
+
+        let products=[];
+        let filteredProducts=[];
+
+        async function fetchProducts(){
+            let response=await fetch('https://fakestoreapi.com/products');
+            products=await response.json();
+            filteredProducts=products;
+            displayProducts(filteredProducts);
+        }
+
+        async function fetchCategories(){
+            let response=await fetch('https://fakestoreapi.com/products/categories');
+            let categories=await response.json();
+            categories.forEach(category =>{
+                let option=document.createElement('option');
+                option.value=category;
+                option.textContent=category;
+                categoryDropdown.appendChild(option);
+            });
+        }
+
+        function displayProducts(products){
+            productList.innerHTML='';
+            products.forEach(product =>{
+                let productDiv=document.createElement('div');
+                productDiv.className='product';
+                productDiv.innerHTML=`
+                    <img src="${product.image}" alt="${product.title}">
+                    <h3>${product.title}</h3>
+                    <p>Price: $${product.price}</p>
+                    <p>Category: ${product.category}</p>
+                `;
+                productList.appendChild(productDiv);
+            });
+            productCount.textContent=products.length;
+        }
+
+        function filterProducts(){
+            let searchText=searchInput.value.toLowerCase();
+            let selectedCategory=categoryDropdown.value;
+            let sortOrder=sortDropdown.value;
+
+            filteredProducts=products.filter(product => 
+                product.title.toLowerCase().includes(searchText) &&
+                (selectedCategory==='' || product.category===selectedCategory)
+            );
+            if (sortOrder==='asc'){
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOrder==='desc'){
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+
+            displayProducts(filteredProducts);
+        }
+
+        searchInput.addEventListener('input', filterProducts);
+        categoryDropdown.addEventListener('change', filterProducts);
+        sortDropdown.addEventListener('change', filterProducts);
+
+        fetchProducts();
+        fetchCategories();
+    </script>
+</body>
+</html>

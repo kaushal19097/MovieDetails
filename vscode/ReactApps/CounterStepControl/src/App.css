@@ -1,0 +1,52 @@
+.counter-container {
+  text-align: center;
+  margin-top: 50px;
+  font-family: Arial, sans-serif;
+}
+
+.count-display {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.step-input {
+  padding: 8px;
+  font-size: 16px;
+  margin: 10px;
+  width: 80px;
+  text-align: center;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.increase-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.increase-btn:hover {
+  background-color: #218838;
+}
+
+.decrease-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.decrease-btn:hover {
+  background-color: #c82333;
+}

@@ -1,0 +1,24 @@
+{
+  "data":[
+    {
+      "name": "Complete UI Design",
+      "status": "completed"
+    },
+    {
+      "name": "Integrate Firebase Auth",
+      "status": "ongoing"
+    },
+    {
+      "name": "Setup Hosting",
+      "status": "not-started"
+    },
+    {
+      "name": "Write Documentation",
+      "status": "ongoing"
+    },
+    {
+      "name": "Deploy Final Build",
+      "status": "not-started"
+    }
+  ]
+}

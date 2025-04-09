@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Selector</title>
+    <style>
+        .container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        select{
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Theme Selector</h1>
+        <label for="themeSelector">Choose a theme:</label>
+        <select id="themeSelector">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="blue">Blue</option>
+        </select>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+            let themeSelector=document.getElementById("themeSelector");
+
+            let themes={
+                light:{
+                    backgroundColor: "#ffffff",
+                    color: "#000000"
+                },
+                dark:{
+                    backgroundColor: "#000000",
+                    color: "#ffffff"
+                },
+                blue:{
+                    backgroundColor: "#007BFF",
+                    color: "#ffffff"
+                }
+            };
+            function applyTheme(theme){
+                let{ backgroundColor, color }=themes[theme]||themes.light;
+                document.body.style.backgroundColor=backgroundColor;
+                document.body.style.color=color;
+            }
+            let savedTheme=sessionStorage.getItem("theme")||"light";
+            themeSelector.value=savedTheme;
+            
+            applyTheme(savedTheme);
+            themeSelector.addEventListener("change",function(){
+                let selectedTheme=themeSelector.value;
+                sessionStorage.setItem("theme",selectedTheme);
+                applyTheme(selectedTheme);
+            });
+        });
+    </script>
+</body>
+</html>

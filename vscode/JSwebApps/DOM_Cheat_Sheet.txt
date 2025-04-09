@@ -1,0 +1,127 @@
+// DOM Cheat Sheet with Examples
+
+// 1. Accessing DOM Elements
+
+// Get element by ID
+const elementById = document.getElementById('myId');
+console.log(elementById); // Logs the element with id='myId'
+
+// Get elements by class name
+const elementsByClass = document.getElementsByClassName('myClass');
+console.log(elementsByClass[0]); // Logs the first element with class='myClass'
+
+// Get elements by tag name
+const elementsByTag = document.getElementsByTagName('div');
+console.log(elementsByTag[0]); // Logs the first <div> element
+
+// Query selector (first match)
+const firstMatch = document.querySelector('.myClass');
+console.log(firstMatch); // Logs the first element matching .myClass
+
+// Query selector all (all matches)
+const allMatches = document.querySelectorAll('div.myClass');
+console.log(allMatches); // Logs all <div> elements with class='myClass'
+
+// 2. Modifying Content
+
+// Change text content
+const textElement = document.getElementById('text');
+textElement.textContent = 'New Text Content';
+
+// Change HTML content
+const htmlElement = document.getElementById('html');
+htmlElement.innerHTML = '<strong>Bold Text</strong>';
+
+// 3. Changing Attributes
+
+// Set an attribute
+const link = document.querySelector('a');
+link.setAttribute('href', 'https://example.com');
+
+// Get an attribute
+console.log(link.getAttribute('href')); // Logs 'https://example.com'
+
+// Remove an attribute
+link.removeAttribute('target');
+
+// 4. Modifying Styles
+
+// Change style directly
+const box = document.getElementById('box');
+box.style.backgroundColor = 'blue';
+box.style.width = '200px';
+
+// Add or remove a class
+box.classList.add('highlight');
+box.classList.remove('highlight');
+
+// 5. Adding/Removing Elements
+
+// Create a new element
+const newElement = document.createElement('p');
+newElement.textContent = 'This is a new paragraph.';
+
+// Append it to an existing element
+const container = document.getElementById('container');
+container.appendChild(newElement);
+
+// Remove an element
+const removeElement = document.getElementById('removeMe');
+removeElement.remove();
+
+// 6. Event Handling
+
+// Add an event listener
+const button = document.getElementById('myButton');
+button.addEventListener('click', () => {
+    console.log('Button clicked!');
+});
+
+// Remove an event listener
+const handleClick = () => console.log('Clicked!');
+button.addEventListener('click', handleClick);
+button.removeEventListener('click', handleClick);
+
+// 7. Traversing the DOM
+
+// Parent node
+const child = document.getElementById('child');
+console.log(child.parentNode); // Logs the parent node of #child
+
+// Children nodes
+const parent = document.getElementById('parent');
+console.log(parent.children); // Logs all child elements of #parent
+
+// Next sibling
+console.log(child.nextElementSibling); // Logs the next sibling element
+
+// Previous sibling
+console.log(child.previousElementSibling); // Logs the previous sibling element
+
+// 8. Common Shortcuts
+
+// Check if an element has a class
+console.log(box.classList.contains('highlight')); // true or false
+
+// Toggle a class
+box.classList.toggle('hidden'); // Adds 'hidden' if not present, removes it if present
+
+// Clone an element
+const clonedElement = box.cloneNode(true); // true for deep clone (includes children)
+container.appendChild(clonedElement);
+
+// 9. Form Handling
+
+// Access input value
+const input = document.getElementById('myInput');
+console.log(input.value); // Logs the value of the input field
+
+// Set input value
+input.value = 'New Value';
+
+// Submit form
+const form = document.getElementById('myForm');
+form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent form submission
+    console.log('Form submitted!');
+});

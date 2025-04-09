@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search App</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #search-box{
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #results{
+            width: 320px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .movie-title{
+            padding: 5px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+        .movie-title:hover{
+            background-color: #f0f0f0;
+        }
+        #movie-details{
+            margin-top: 20px;
+            text-align: left;
+            width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search</h1>
+    <input type="text" id="search-box" placeholder="Enter movie title...">
+    <div id="results"></div>
+    <div id="movie-details"></div>
+
+    <script>
+        const apiKey="b7c797b";
+        let timeout;
+
+        document.getElementById("search-box").addEventListener("input", function (){
+            clearTimeout(timeout);
+            timeout=setTimeout(() =>{
+                searchMovies(this.value);
+            }, 500);
+        });
+
+        async function searchMovies(query){
+            if (query.length < 3) return;
+            const response=await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${apiKey}`);
+            const data=await response.json();
+            displayResults(data.Search);
+        }
+
+        function displayResults(movies){
+            const resultsDiv=document.getElementById("results");
+            resultsDiv.innerHTML="";
+            if (!movies){
+                resultsDiv.innerHTML="<p>No results found</p>";
+                return;
+            }
+            movies.forEach(movie =>{
+                const movieElement=document.createElement("div");
+                movieElement.textContent=movie.Title;
+                movieElement.classList.add("movie-title");
+                movieElement.addEventListener("click", () => fetchMovieDetails(movie.imdbID));
+                resultsDiv.appendChild(movieElement);
+            });
+        }
+
+        async function fetchMovieDetails(movieId){
+            const response=await fetch(`http://www.omdbapi.com/?i=${movieId}&apikey=${apiKey}`);
+            const data=await response.json();
+            displayMovieDetails(data);
+        }
+
+        function displayMovieDetails(movie){
+            const detailsDiv=document.getElementById("movie-details");
+            detailsDiv.innerHTML=`
+                <h2>${movie.Title}</h2>
+                <p><strong>Year:</strong> ${movie.Year}</p>
+                <p><strong>Genre:</strong> ${movie.Genre}</p>
+                <p><strong>Director:</strong> ${movie.Director}</p>
+                <p><strong>Plot:</strong> ${movie.Plot}</p>
+                <img src="${movie.Poster}" alt="Movie Poster" width="200">
+            `;
+        }
+    </script>
+</body>
+</html>

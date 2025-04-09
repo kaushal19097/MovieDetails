@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users List</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1{
+      color: #333;
+    }
+    ul{
+      list-style-type: none;
+      padding: 0;
+    }
+    li{
+      margin: 8px 0;
+    }
+    a{
+      text-decoration: none;
+      color: #007bff;
+      cursor: pointer;
+    }
+    a:hover{
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>User List</h1>
+  <ul id="userList"></ul>
+
+  <script>
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response=>response.json())
+      .then(users=>{
+        let userList=document.getElementById('userList');
+
+        users.forEach(user=>{
+          let listItem=document.createElement('li');
+          let userLink=document.createElement('a');
+
+          userLink.textContent=user.name;
+          userLink.href='#';
+          userLink.addEventListener('click', () =>{
+            alert(`Email: ${user.email}`);
+          });
+          listItem.appendChild(userLink);
+          userList.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error fetching users:', error));
+  </script>
+</body>
+</html>

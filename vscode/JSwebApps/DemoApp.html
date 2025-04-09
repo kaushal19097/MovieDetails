@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Users</h1>
+    <div id="btnDiv">
+        <button id="addbtn" onclick="Showform()">Add Users</button>
+    </div>
+    <div id="Userform" style="display: none;">
+        <form action="" method="get">
+            <input type="text" name="name" id="name" placeholder="Enter User Name" required>
+            <input type="email" name="email" id="email" placeholder="Enter User Email" required>
+            <button id='subBtn' type="button" onclick="createUsers()">Submit</button>
+        </form>
+    </div>
+    <div id="container"></div>
+</body>
+
+</html>
+<style>
+    #container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+
+    #container>div {
+        border-radius: 5px;
+        padding: 1rem;
+        box-shadow: rgba(3, 3, 3, 0.24) 0px 3px 8px;
+    }
+
+    #container>div:hover {
+        background: rgba(1, 18, 49, 0.863);
+        cursor: pointer;
+    }
+
+    #editbtn,
+    #subBtn,
+    #deletebtn,
+    #addbtn:hover {
+        cursor: pointer;
+    }
+
+    #btnDiv {
+        padding: 1rem;
+    }
+</style>
+<script>
+    function Showform(){
+        let a=document.getElementById('Userform');
+        if(a.style.display==="none"){
+            a.style.display="block";
+        }
+        else{
+            a.style.display='none';
+        }
+    }
+    function Editform(ID){
+        let a=document.getElementById(`editform-${ID}`);
+        if(a.style.display==="none"){
+            a.style.display="block";
+        }
+        else{
+            a.style.display='none';
+        }
+    }
+
+    function createUsers(){
+        event.preventDefault;
+        const email=document.getElementById('email').value;
+        const name=document.getElementById('name').value;
+        const Userid=Math.floor(Math.random()*10000);
+        const data={
+            name:name,
+            email:email,
+            Userid:Userid
+        };
+        let requestOptions={
+            method:'PUT',
+            body:JSON.stringify(data),
+            redirect:'follow'
+        };
+        fetch(`https://masaiassignment-17a4f-default-rtdb.firebaseio.com/users/${Userid}.json`,requestOptions)
+        .then((res)=>{
+            alert("User Created");
+            window.location.href='./DemoApp.html';
+        });    
+        }
+
+    async function getUsers() {
+        try {
+            let res = await fetch('https://masaiassignment-17a4f-default-rtdb.firebaseio.com/users.json');
+            let resp = await res.json();
+            let arr = Object.entries(resp);
+            displayUsers(arr);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    getUsers();
+
+    
+    function displayUsers(users) {
+        document.getElementById('container').innerHTML = '';
+        users.forEach(([id, user]) => {
+            const card = document.createElement("div");
+            card.innerHTML = `
+        <h2>${user.name}</h2>
+        <p>${user.email}</p>
+        <div>
+            <!-- <button id="editbtn" onclick="editUser('${id}')">Edit</button>-->
+            <button id="editbtn" onclick="Editform('${id}')">Edit</button>
+            <button id="deletebtn" onclick="deleteUser('${id}')">Delete</button>
+            <div id="editform-${id}" style="display: none;">
+            <form action="" method="get">
+            <input type="email" name="email" id="editemail-'${id}'" placeholder="Enter User Email">
+            <button id='EditsubBtn-${id}' type="button" onclick="EditsubBtn('${id}')">Submit</button>
+
+             </form>
+    </div>
+
+        </div>
+        `;
+            document.getElementById('container').appendChild(card);
+        });
+    }
+
+    function EditsubBtn(id){
+        const email=document.getElementById(`editemail-'${id}'`).value;
+        console.log(id,email);
+        const requestOptions={
+            method:'PATCH',
+            body:JSON.stringify({id,email}),
+            redirect:"follow"
+        };
+        if(!confirm("are you sure?")) return;
+        fetch(`https://masaiassignment-17a4f-default-rtdb.firebaseio.com/users/${id}.json`, requestOptions)
+        .then(() => { alert("user edited"); getUsers() })
+        .catch((err) => console.log(err, ' Error in deleting user'));
+    }
+
+    function deleteUser(userID) {
+        console.log(userID);
+        if (!confirm('Are you sure?')) return;
+        const requestOptions = {
+            method: 'DELETE',
+            redirect: "follow"
+        };
+        fetch(`https://masaiassignment-17a4f-default-rtdb.firebaseio.com/users/${userID}.json`, requestOptions).then(() => { alert("user deleted"); getUsers() }).catch((err) => console.log(err, ' Error in deleting user'));
+
+    }
+</script>
